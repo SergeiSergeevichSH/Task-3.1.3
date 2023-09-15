@@ -1,0 +1,25 @@
+
+
+{
+  "username": "AAAAA",
+  "name": "Устал",
+  "surname": "ПораОтдохнуть",
+  "age": 30,
+  "password": "654123",
+  "roles": ["ROLE_USER", "ROLE_ADMIN"]
+}
+
+{
+  "username": "Ivan",
+  "name": "Ivan",
+  "surname": "Ivanov",
+  "age": 20,
+  "password": "1234",
+  "roles": ["ROLE_USER"]
+}
+
+{
+  "name": "IvanKA",
+  "surname": "IvanovKA",
+  "age": 2002
+}
