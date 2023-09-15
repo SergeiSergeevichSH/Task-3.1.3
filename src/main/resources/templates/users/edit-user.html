@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit user</title>
+    <style>
+        body {
+            font-size: 18px; /* Увеличение размера шрифта */
+            max-width: 300px; /* Ограничение максимальной ширины формы */
+            margin: 0 auto; /* Центрирование формы по горизонтали */
+        }
+
+        label {
+            font-size: 16px; /* Увеличение размера шрифта меток */
+            font-weight: bold; /* Сделать метки жирными */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px; /* Увеличение размера шрифта полей ввода */
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 18px; /* Увеличение размера шрифта кнопки */
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{/admin/{id}(id=${user.id})}" th:method="PATCH" th:object="${user}">
+    <label for="name">Name</label>
+    <input type="text" id="name" th:field="*{name}">
+    <br>
+    <label for="surname">Surname</label>
+    <input type="text" id="surname" th:field="*{surname}">
+    <br>
+    <label for="age">Age</label>
+    <input type="text" id="age" th:field="*{age}">
+    <br>
+    <input type="submit" value="Edit">
+</form>
+<br>
+<a href="/logout">
+    <button style="font-size: 18px; padding: 12px 6px;  color: blue;">Выйти</button>
+</a>
+</body>
+</html>

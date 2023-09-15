@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new user</title>
+    <style>
+        body {
+            font-size: 18px; /* Увеличение размера шрифта */
+            max-width: 300px; /* Ограничение максимальной ширины формы */
+            margin: 0 auto; /* Центрирование формы по горизонтали */
+        }
+
+        label {
+            font-size: 16px; /* Увеличение размера шрифта меток */
+            font-weight: bold; /* Сделать метки жирными */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px; /* Увеличение размера шрифта полей ввода */
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 18px; /* Увеличение размера шрифта кнопки */
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{/admin}" th:method="POST" th:object="${user}">
+<!--<form th:action="@{/admin}" th:method="POST" th:object="${user}">-->
+    <label for="name">Name</label>
+    <input type="text" id="name" th:field="*{name}">
+    <br>
+    <label for="surname">Surname</label>
+    <input type="text" id="surname" th:field="*{surname}">
+    <br>
+    <label for="age">Age</label>
+    <input type="text" id="age" th:field="*{age}">
+    <br>
+    <label for="username">Username</label>
+    <input type="text" id="username" th:field="*{username}">
+    <br>
+
+    <label for="password">Password</label>
+    <input type="text" id="password" th:field="*{password}" name="password">
+
+<br>
+    <label><input type="checkbox" name="roles" value="ROLE_ADMIN"> Администратор</label><br>
+    <label><input type="checkbox" name="roles" value="ROLE_USER"> Пользователь</label><br>
+
+    <br>
+    <input type="submit" value="Add new user">
+    <br>
+</form>
+
+<br>
+<a href="/logout">
+    <button style="font-size: 18px; padding: 12px 6px;  color: blue;">Выйти</button>
+</a>
+</body>
+</html>
