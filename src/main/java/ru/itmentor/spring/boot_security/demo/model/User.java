@@ -33,7 +33,6 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-//    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Role> roles;
 
@@ -108,19 +107,17 @@ public class User implements UserDetails {
         }
     }
 
-//    @JsonIgnore
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
 
-//    @JsonIgnore
     @Override
     public String getPassword() {
         return password;
     }
 
-//    @JsonIgnore
     @Override
     public String getUsername() {
         return username;
@@ -143,6 +140,7 @@ public class User implements UserDetails {
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
@@ -159,8 +157,8 @@ public class User implements UserDetails {
                 && Objects.equals(getUsername(), user.getUsername())
                 && Objects.equals(getName(), user.getName())
                 && Objects.equals(getSurname(), user.getSurname())
-                && Objects.equals(getPassword(), user.getPassword())
-                ;
+                && Objects.equals(getPassword(), user.getPassword()
+        );
     }
 
     @Override

@@ -27,7 +27,6 @@ public class AdminRESTController {
         return userList;
     }
 
-
     @PostMapping("/addusers")
     public ResponseEntity<String> addNewUser(@RequestBody User user) {
         userService.save(user);
