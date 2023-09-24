@@ -39,11 +39,10 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return usersRepository.findAll();
     }
-
     @Override
     public User getById(int id) {
-
         Optional<User> userOptional = usersRepository.findById(id);
+        System.out.println("userOptional = " + userOptional);
         return userOptional.orElse(null);
     }
 
@@ -54,18 +53,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void save(User user) {
-
+    public void saveUser(User user) {
         Set<Role> userRoles = new HashSet<>();
         for (Role roleName : user.getRoles()) {
             Role existingRole = roleRepository.findByRole(roleName.getRole());
             if (existingRole != null) {
                 userRoles.add(existingRole);
-            } else {
-                // Если роли не существует, создаю новую роль и сохраняю её
-                Role newRole = new Role(roleName.getRole());
-                roleRepository.save(newRole);
-                userRoles.add(newRole);
             }
         }
         user.setRoles(userRoles);
@@ -75,13 +68,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void update(int id, User user) {
-
+    public void updateUser(int id, User user) {
         Optional<User> existingUser = usersRepository.findById(id);
+        System.out.println("existingUser = " + existingUser);
         if (existingUser.isEmpty()) {
             throw new NoSuchUserException("Пользователь  с таким ID " + id + " в БД не найден");
         }
-
         User userToUpdate = existingUser.get();
         userToUpdate.setName(user.getName());
         userToUpdate.setSurname(user.getSurname());
@@ -91,11 +83,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void delete(int id) {
-        Optional<User> existingUser = usersRepository.findById(id);
-        System.out.println("usersRepositoryByIdUser = " + existingUser);
-        if (existingUser.isEmpty()) {
-            throw new NoSuchUserException("Пользователь  с таким ID-[" + id + "] в БД не найден");
+    public void deleteUser(int id) {
+        if (!usersRepository.existsById(id)) {
+            throw new NoSuchUserException("Пользователь с ID-[" + id + "] в БД не найден");
         }
         usersRepository.deleteById(id);
     }

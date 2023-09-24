@@ -55,8 +55,8 @@ public class DataInitializer implements CommandLineRunner {
         admin.setPassword("1234");
         admin.setRoles(new HashSet<>(Set.of(roleAdmin,roleUser)));
 
-        userService.save(admin);
-        userService.save(user1);
+        userService.saveUser(admin);
+        userService.saveUser(user1);
 
     }
 }

@@ -11,9 +11,8 @@ import ru.itmentor.spring.boot_security.demo.service.UserService;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping()
 public class UserRESTController {
-
 
     private final UserService userService;
 
@@ -22,16 +21,12 @@ public class UserRESTController {
         this.userService = userService;
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public User getById(@PathVariable int id) {
-
         User user = userService.getById(id);
-
         if (user == null) {
             throw new NoSuchUserException("Пользователь  с таким ID " + id + " в БД не найден");
         }
         return user;
     }
-
-
 }

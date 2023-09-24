@@ -33,8 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
 
                 .authorizeRequests()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+//                    .antMatchers("/admin/**").hasRole("ADMIN")
+//                    .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
 //                    .anyRequest().authenticated()
                 .and()
                 .csrf().disable() // отключить CSRF защиту
@@ -48,35 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .deleteCookies("JSESSIONID")
                 .permitAll();
 
-
-//                .authorizeRequests()
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
-//                .anyRequest().authenticated()
-//                .and()
-//                .csrf().disable() // отключить CSRF защиту
-//                .formLogin().successHandler(successUserHandler)
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login")
-//                .invalidateHttpSession(true)
-//                .permitAll();
-
-//                       .authorizeRequests()
-//                .anyRequest().permitAll()
-////                .antMatchers("/admin/**").hasRole("ADMIN")
-////                .antMatchers("/user/").hasAnyRole("USER", "ADMIN")
-////                .anyRequest().authenticated()
-//                .and()
-//                .csrf().disable() // отключить CSRF защиту
-//                .httpBasic()
-////                .formLogin().successHandler(successUserHandler)
-////                .permitAll()
-//                .and()
-//                .logout().logoutSuccessUrl("/login")
-//                .permitAll();
     }
 
     @Override
