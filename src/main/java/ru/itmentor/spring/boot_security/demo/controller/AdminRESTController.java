@@ -30,36 +30,20 @@ public class AdminRESTController {
     @PostMapping("/addusers")
     public ResponseEntity<String> addNewUser(@RequestBody User user) {
         userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Пользователь создан и добавлен в БД");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Пользователь ["+user.getName()+"] создан и добавлен в БД");
     }
 
-    @PatchMapping("/users/{id}")
-    public void editUser(@PathVariable("id") int id, @RequestBody User updatedUser) {
-        User existingUser = userService.getById(id);
-        if (existingUser == null) {
-            throw new NoSuchUserException("Пользователь  с таким ID " + id + " в БД не найден");
-        }
-
-        existingUser.setName(updatedUser.getName());
-        existingUser.setSurname(updatedUser.getSurname());
-        existingUser.setAge(updatedUser.getAge());
-
-        userService.update(existingUser);
-        throw new NoSuchUserException("Пользователь  с ID " + id + " успешно обновлен в БД");
-
+    @PatchMapping("/user/update/{id}")
+    public void update( @PathVariable("id") int id, @RequestBody User updatedUser) {
+        userService.update(id, updatedUser);
+        throw new NoSuchUserException("Пользователь  с ID-[" +id + "] успешно обновлен в БД");
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") int id) {
-        User existingUser = userService.getById(id);
-
-        if (existingUser == null) {
-            return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
-        }
-
         try {
             userService.delete(id);
-            return new ResponseEntity<>("Пользователь успешно удален", HttpStatus.OK);
+            return new ResponseEntity<>("Пользователь с ID-[" +id + "] успешно удален", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Произошла ошибка при удалении пользователя: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);

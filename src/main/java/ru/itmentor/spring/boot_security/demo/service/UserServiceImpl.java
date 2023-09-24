@@ -5,11 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.itmentor.spring.boot_security.demo.exception_hendling.NoSuchUserException;
+import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.repository.RoleRepository;
 import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -19,10 +24,15 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository usersRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository usersRepository,
+                           PasswordEncoder passwordEncoder,
+                           RoleRepository roleRepository) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -45,25 +55,48 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void save(User user) {
+
+        Set<Role> userRoles = new HashSet<>();
+        for (Role roleName : user.getRoles()) {
+            Role existingRole = roleRepository.findByRole(roleName.getRole());
+            if (existingRole != null) {
+                userRoles.add(existingRole);
+            } else {
+                // Если роли не существует, создаю новую роль и сохраняю её
+                Role newRole = new Role(roleName.getRole());
+                roleRepository.save(newRole);
+                userRoles.add(newRole);
+            }
+        }
+        user.setRoles(userRoles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
     }
 
     @Transactional
     @Override
-    public void update(User user) {
-        Optional<User> existingUser = usersRepository.findById(user.getId());
-        existingUser.ifPresent(userToUpdate -> {
-            userToUpdate.setUsername(user.getUsername());
-            userToUpdate.setPassword(user.getPassword());
-            userToUpdate.setRoles(user.getRoles());
-            usersRepository.save(userToUpdate);
-        });
+    public void update(int id, User user) {
+
+        Optional<User> existingUser = usersRepository.findById(id);
+        if (existingUser.isEmpty()) {
+            throw new NoSuchUserException("Пользователь  с таким ID " + id + " в БД не найден");
+        }
+
+        User userToUpdate = existingUser.get();
+        userToUpdate.setName(user.getName());
+        userToUpdate.setSurname(user.getSurname());
+        userToUpdate.setAge(user.getAge());
+        usersRepository.save(userToUpdate);
     }
+
     @Transactional
     @Override
     public void delete(int id) {
+        Optional<User> existingUser = usersRepository.findById(id);
+        System.out.println("usersRepositoryByIdUser = " + existingUser);
+        if (existingUser.isEmpty()) {
+            throw new NoSuchUserException("Пользователь  с таким ID-[" + id + "] в БД не найден");
+        }
         usersRepository.deleteById(id);
     }
-
 }
