@@ -3,6 +3,8 @@ package ru.itmentor.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.exception_hendling.NoSuchUserException;
 import ru.itmentor.spring.boot_security.demo.model.User;
@@ -47,6 +49,21 @@ public class AdminRESTController {
         } catch (Exception e) {
             return new ResponseEntity<>("Произошла ошибка при удалении пользователя: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login() {
+        // Получить текущего аутентифицированного пользователя
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Проверить, что аутентификация прошла успешно
+        if (authentication.isAuthenticated()) {
+            // Возвращаем успешный ответ
+            return ResponseEntity.ok("Аутентификация прошла успешно!");
+        } else {
+            // Возвращаем ошибку, если аутентификация не удалась
+            return ResponseEntity.status(401).body("Ошибка аутентификации");
         }
     }
 }

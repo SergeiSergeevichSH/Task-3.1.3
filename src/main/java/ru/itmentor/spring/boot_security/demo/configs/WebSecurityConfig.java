@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import ru.itmentor.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
 @Configuration
@@ -17,10 +18,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
     private final UserDetailsServiceImpl userDetailsService;
 
+//    private final AuthenticationEntryPoint entryPoint;
+
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailsServiceImpl userDetailsService) {
+    public WebSecurityConfig(
+            SuccessUserHandler successUserHandler,
+            UserDetailsServiceImpl userDetailsService
+//            AuthenticationEntryPoint entryPoint
+    ) {
         this.successUserHandler = successUserHandler;
         this.userDetailsService = userDetailsService;
+//        this.entryPoint = entryPoint;
     }
 
     @Bean
@@ -33,20 +41,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
 
                 .authorizeRequests()
+                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
+                .httpBasic()
+//                .authenticationEntryPoint(entryPoint)
+                .and()
+                .csrf().disable();
+//                .logout()
+//                .permitAll();
+
+//                .authorizeRequests()
 //                    .antMatchers("/admin/**").hasRole("ADMIN")
 //                    .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
 //                    .anyRequest().authenticated()
-                .and()
-                .csrf().disable() // отключить CSRF защиту
-                .formLogin().successHandler(successUserHandler)
-                .permitAll()
-                .and()
-                .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                .permitAll();
+//                .and()
+//                .csrf().disable() // отключить CSRF защиту
+//                .formLogin().successHandler(successUserHandler)
+//                .permitAll()
+//                .and()
+//                .logout()
+//                    .logoutUrl("/logout")
+//                    .logoutSuccessUrl("/login")
+//                    .invalidateHttpSession(true)
+//                    .deleteCookies("JSESSIONID")
+//                .permitAll();
 
     }
 

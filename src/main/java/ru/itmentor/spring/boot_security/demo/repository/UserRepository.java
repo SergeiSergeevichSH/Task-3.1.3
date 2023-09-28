@@ -8,4 +8,5 @@ import ru.itmentor.spring.boot_security.demo.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     UserDetails getUserByUsername(@Param("username") String username);
+    User findByUsername(String username);
 }
