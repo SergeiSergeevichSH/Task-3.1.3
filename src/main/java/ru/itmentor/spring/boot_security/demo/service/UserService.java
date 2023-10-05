@@ -10,7 +10,7 @@ public interface UserService {
 
     User getById(int id);
 
-    User getByUsername(String username);
+//    User getByUsername(String username);
 
     void saveUser(User user);
 

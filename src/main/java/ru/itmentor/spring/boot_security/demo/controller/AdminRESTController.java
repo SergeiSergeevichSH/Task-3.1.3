@@ -25,8 +25,7 @@ public class AdminRESTController {
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        List<User> userList = userService.getAllUsers();
-        return userList;
+        return userService.getAllUsers();
     }
 
     @PostMapping("/addusers")
@@ -54,15 +53,11 @@ public class AdminRESTController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login() {
-        // Получить текущего аутентифицированного пользователя
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Проверить, что аутентификация прошла успешно
         if (authentication.isAuthenticated()) {
-            // Возвращаем успешный ответ
             return ResponseEntity.ok("Аутентификация прошла успешно!");
         } else {
-            // Возвращаем ошибку, если аутентификация не удалась
             return ResponseEntity.status(401).body("Ошибка аутентификации");
         }
     }

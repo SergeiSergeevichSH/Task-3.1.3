@@ -46,10 +46,10 @@ public class UserServiceImpl implements UserService {
         return userOptional.orElse(null);
     }
 
-    @Override
-    public User getByUsername(String username) {
-        return (User) usersRepository.getUserByUsername(username);
-    }
+//    @Override
+//    public User getByUsername(String username) {
+//        return (User) usersRepository.getUserByUsername(username);
+//    }
 
     @Transactional
     @Override
@@ -74,7 +74,16 @@ public class UserServiceImpl implements UserService {
         if (existingUser.isEmpty()) {
             throw new NoSuchUserException("Пользователь  с таким ID " + id + " в БД не найден");
         }
+        Set<Role> userRoles = new HashSet<>();
+        for (Role roleName : user.getRoles()) {
+            Role existingRole = roleRepository.findByRole(roleName.getRole());
+            if (existingRole != null) {
+                userRoles.add(existingRole);
+            }
+        }
+//        user.setRoles(userRoles);
         User userToUpdate = existingUser.get();
+        userToUpdate.setRoles(userRoles);
         userToUpdate.setName(user.getName());
         userToUpdate.setSurname(user.getSurname());
         userToUpdate.setAge(user.getAge());
